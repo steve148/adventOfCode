@@ -42,24 +42,35 @@ func main() {
 	var safeCount int
 	for _, report := range reports {
 		increasing = report[0] < report[1]
-		isSafe := true
+		isSafe := false
 
-		for i := 0; i < len(report)-1; i++ {
-			curr := report[i]
-			next := report[i+1]
+		fmt.Println(report)
+		for popIndex := 0; popIndex < len(report); popIndex++ {
+			poppedReport := append([]int{}, report[:popIndex]...)
+			poppedReport = append(poppedReport, report[popIndex+1:]...)
+			fmt.Println(poppedReport)
+			popppedRowSafe := true
+			for i := 0; i < len(poppedReport)-1; i++ {
+				curr := poppedReport[i]
+				next := poppedReport[i+1]
 
-			fmt.Println(report[i], report[i+1], increasing)
-			if increasing && (next < curr+1 || next > curr+3) {
-				isSafe = false
-				break
+				if increasing && (next < curr+1 || next > curr+3) {
+					popppedRowSafe = false
+					break
 
+				}
+				if !increasing && (next > curr-1 || next < curr-3) {
+					popppedRowSafe = false
+					break
+				}
 			}
-			if !increasing && (next > curr-1 || next < curr-3) {
-				isSafe = false
+
+			if popppedRowSafe {
+				isSafe = true
 				break
 			}
 		}
-		fmt.Println(report, isSafe)
+
 		if isSafe {
 			safeCount++
 		}
