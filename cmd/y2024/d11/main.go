@@ -9,6 +9,12 @@ import (
 )
 
 func main() {
+	arg := os.Args[1]
+	iter, err := strconv.Atoi(arg)
+	if err != nil {
+		panic(err)
+	}
+
 	file, err := os.Open("data.txt")
 	if err != nil {
 		panic(err)
@@ -33,19 +39,32 @@ func main() {
 		stones = append(stones, i)
 	}
 
-	for i := 0; i < 25; i++ {
-		stones = Blink(stones)
+	stoneMap := make(map[int]int)
+	for _, stone := range stones {
+		stoneMap[stone]++
 	}
-	fmt.Println(len(stones))
+
+	for i := 0; i < iter; i++ {
+		stoneMap = Blink(stoneMap)
+	}
+
+	fmt.Println(NumStones(stoneMap))
 }
 
-func Blink(stones []int) []int {
-	var result []int
-	for _, stone := range stones {
+func NumStones(stoneMap map[int]int) int {
+	var total int
+	for _, count := range stoneMap {
+		total += count
+	}
+	return total
+}
 
+func Blink(stones map[int]int) map[int]int {
+	result := make(map[int]int)
+	for stone, count := range stones {
 		if stone == 0 {
 			// Rule 1: Swap 0 for 1
-			result = append(result, 1)
+			result[1] += count
 			continue
 		}
 
@@ -61,12 +80,13 @@ func Blink(stones []int) []int {
 			if err != nil {
 				panic(err)
 			}
-			result = append(result, left, right)
+			result[left] += count
+			result[right] += count
 			continue
 		}
 
 		// Rule 3: Multiply by 2024
-		result = append(result, stone*2024)
+		result[stone*2024] += count
 	}
 	return result
 }
