@@ -1,6 +1,6 @@
 module github.com/steve148/advent-of-code-2021
 
-go 1.17
+go 1.18
 
 require (
 	github.com/steve148/advent-of-code-2021/day10 v0.0.0-20211230163928-f0bd326f042b // indirect
